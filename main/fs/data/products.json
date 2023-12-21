@@ -1,0 +1,16 @@
+[
+  {
+    "id": 1,
+    "title": "Pantalón negro",
+    "photo": "url",
+    "price": 424245,
+    "stock": 100
+  },
+  {
+    "id": 2,
+    "title": "Remera gris",
+    "photo": "url",
+    "price": 43254,
+    "stock": 47
+  }
+]

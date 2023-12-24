@@ -14,3 +14,5 @@ The constructor receives as a parameter the path in which you want to store or r
 - **read():** **Returns** the array of products or users created, or an error message if there are no products to read.
 
 - **readOne(id):** It receives as a parameter the id of the desired product or user. **Returns** the object with that id. If it does not exist, it returns an error messaage.
+
+- **destroy(id):** It receives as a parameter the id of the desired product or user to delete. Returns true if the product was deleted correctly or a string if there is an error.

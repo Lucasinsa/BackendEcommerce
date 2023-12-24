@@ -1,0 +1,16 @@
+[
+  {
+    "id": "af9919b1cc9832f686789ae1",
+    "title": "Remera",
+    "photo": "url",
+    "price": 32423,
+    "stock": 432
+  },
+  {
+    "id": "633a77e7698097e0d7fef9f4",
+    "title": "Pantalón",
+    "photo": "url",
+    "price": 323,
+    "stock": 651
+  }
+]

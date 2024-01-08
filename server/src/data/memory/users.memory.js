@@ -8,8 +8,8 @@ class UserManager {
   create(data) {
     try {
       const { name, photo, email } = data;
-      if (!name || !photo || !email) {
-        throw new Error("Please enter name, photo, and email.");
+      if(!name || !photo || !email ) {
+        throw new Error("Please, enter a valid name, photo and email.");
       }
       const user = {
         id: crypto.randomBytes(12).toString("hex"),
@@ -18,7 +18,7 @@ class UserManager {
         email: email,
       };
       UserManager.#users.push(user);
-      return true;
+      return user;
     } catch (error) {
       return error.message;
     }
@@ -61,6 +61,25 @@ class UserManager {
       return true;
     } catch (error) {
       return error.message;
+    }
+  }
+
+  update(id, data) {
+    try {
+      const required = this.readOne(id)
+      if(typeof required === "string") {
+        throw new Error(required)
+      }
+      const { name, photo, email } = data;
+      if (!name && !photo && !email) {
+        throw new Error("Please, enter the new name, photo, or email.");
+      }
+      name && (required.name = name)
+      photo && (required.photo = photo)
+      email && (required.email = email)
+      return required
+    } catch (error) {
+      return error.message
     }
   }
 }

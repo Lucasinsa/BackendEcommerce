@@ -9,17 +9,23 @@ class ProductManager {
     try {
       const { title, photo, price, stock } = data;
       if (!title || !photo || !price || !stock) {
-        throw new Error("Please enter title, photo, price and stock.");
+        throw new Error("Please, enter title, photo, price and stock.");
+      }
+      if(isNaN(Number(price))) {
+        throw new Error("Please, enter a valid price.");
+      }
+      if(isNaN(Number(stock))) {
+        throw new Error("Please, enter a valid stock.");
       }
       const product = {
         id: crypto.randomBytes(12).toString("hex"),
         title: title,
         photo: photo,
         price: Number(price),
-        stock: Number(stock),
+        stock: Number(stock)
       };
       ProductManager.#products.push(product);
-      return true;
+      return product;
     } catch (error) {
       return error.message;
     }
@@ -59,9 +65,35 @@ class ProductManager {
         throw new Error(required);
       }
       ProductManager.#products = ProductManager.#products.filter((each) => each.id !== id);
-      return true;
+      return required;
     } catch (error) {
       return error.message;
+    }
+  }
+
+  update(id, data) {
+    try {
+      const required = this.readOne(id)
+      if(typeof required === "string") {
+        throw new Error(required)
+      }
+      const { title, photo, price, stock } = data;
+      if (!title && !photo && !price && !stock) {
+        throw new Error("Please, enter a new title, photo, price or stock.");
+      }
+      if((price && isNaN(Number(price)))){
+        throw new Error("Please, enter a valid price.");
+      }
+      if((stock && isNaN(Number(stock)))){
+        throw new Error("Please, enter a valid stock.");
+      }
+      title && (required.title = title)
+      photo && (required.photo = photo)
+      price && (required.price = Number(price))
+      stock && (required.stock = Number(stock))
+      return required
+    } catch (error) {
+      return error.message
     }
   }
 }

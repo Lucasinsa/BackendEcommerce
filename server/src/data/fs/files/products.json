@@ -1,1 +1,72 @@
-[]
+[
+  {
+    "id": "03130d3ad7b00b407ab7c269",
+    "title": "Green T-shirt",
+    "photo": "https://acdn.mitiendanube.com/stores/002/815/592/products/verde11-7f2a4909a90de8354a16762299564293-1024-1024.jpg",
+    "price": 32000,
+    "stock": 50
+  },
+  {
+    "id": "fe6b53fbe171a932fb3a3c7b",
+    "title": "Grey T-shirt",
+    "photo": "https://acdn.mitiendanube.com/stores/001/110/871/products/remera-gris1-47195b33e6e14831cc16097722042131-640-0.jpg",
+    "price": 30000,
+    "stock": 50
+  },
+  {
+    "id": "d7015a27a19fc414c9c0f9e2",
+    "title": "Orange T-shirt",
+    "photo": "https://http2.mlstatic.com/D_NQ_NP_679170-MLA71671746495_092023-O.webp",
+    "price": 31000,
+    "stock": 50
+  },
+  {
+    "id": "9a5a965297619f418580f5cf",
+    "title": "Red T-shirt",
+    "photo": "https://i.ebayimg.com/images/g/FbEAAOSwgXBjD6BW/s-l960.jpg",
+    "price": 34000,
+    "stock": 50
+  },
+  {
+    "id": "266491d8690a5ae7d7dc6550",
+    "title": "Black T-shirt",
+    "photo": "https://http2.mlstatic.com/D_NQ_NP_918985-MLA48853594981_012022-O.webp",
+    "price": 35000,
+    "stock": 50
+  },
+  {
+    "id": "c7e17f5fafe0a4a031cc5cf3",
+    "title": "White T-shirt",
+    "photo": "https://cdn.sportswearcollection.com/Images/Color/87976_f_fl.jpg",
+    "price": 35000,
+    "stock": 50
+  },
+  {
+    "id": "d69b6cae7a0cd50af7b11f8b",
+    "title": "Purple T-shirt",
+    "photo": "https://cdn.sportswearcollection.com/Images/Color/87962_f_fl.jpg",
+    "price": 31000,
+    "stock": 50
+  },
+  {
+    "id": "57aad15877d5357b1aa6c03c",
+    "title": "Pink T-shirt",
+    "photo": "https://i.ebayimg.com/images/g/0k8AAOSwSI5jBmaa/s-l960.jpg",
+    "price": 29000,
+    "stock": 50
+  },
+  {
+    "id": "927f013a78c54ecf3dc6b45d",
+    "title": "Yellow T-shirt",
+    "photo": "https://i.ebayimg.com/images/g/DpgAAOSwgYdbyO8X/s-l960.jpg",
+    "price": 30000,
+    "stock": 50
+  },
+  {
+    "id": "9e0922227db85a88fb50cf21",
+    "title": "Blue T-shirt",
+    "photo": "https://cdn.sportswearcollection.com/Images/Color/66666_f_fl.jpg",
+    "price": 30000,
+    "stock": 50
+  }
+]

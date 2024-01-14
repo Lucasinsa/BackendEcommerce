@@ -24,15 +24,6 @@ class ProductManager {
   async create(data) {
     try {
       const { title, photo, price, stock } = data;
-      if (!title || !photo || !price || !stock) {
-        throw new Error("Please enter title, photo, price and stock.");
-      }
-      if (isNaN(Number(price))) {
-        throw new Error("Please, enter a valid price.");
-      }
-      if (isNaN(Number(stock))) {
-        throw new Error("Please, enter a valid stock.");
-      }
       const product = {
         id: crypto.randomBytes(12).toString("hex"),
         title: title,

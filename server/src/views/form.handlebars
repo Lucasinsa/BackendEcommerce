@@ -1,0 +1,25 @@
+<div class="form-container w-50 m-auto mt-4 mb-4">
+    <h1 class="fw-bolder text-center mb-4">PRODUCT FORM</h1>
+    <form>
+        <div class="mb-3">
+            <label for="input-title" class="form-label text-center w-100">Title</label>
+            <input type="text" class="form-control" id="input-title">
+        </div>
+        <div class="mb-3">
+            <label for="input-photo" class="form-label text-center w-100">Photo</label>
+            <input type="text" class="form-control" id="input-photo">
+        </div>
+        <div class="mb-3">
+            <label for="input-price" class="form-label text-center w-100">Price</label>
+            <input type="number" class="form-control" id="input-price" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="input-stock" class="form-label text-center w-100">Stock</label>
+            <input type="number" class="form-control" id="input-stock">
+        </div>
+        <p id="props-error" class="bg-danger text-light p-4 rounded text-center d-none"></p>
+        <button type="submit" class="btn btn-primary bg-dark w-100" id="btn-create">CREATE</button>
+    </form>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/form.js"></script>

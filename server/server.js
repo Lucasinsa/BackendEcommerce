@@ -1,19 +1,27 @@
 import express from "express";
 import __dirname from "./utils.js";
+import { createServer } from "http";
+import { Server } from "socket.io";
+import { engine } from "express-handlebars";
 import morgan from "morgan";
 import router from "./src/routers/index.router.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 import pathHandler from "./src/middlewares/pathHandler.js";
+import socketUtils from "./src/utils/socket.utils.js";
 
-//I create express server
+//I create and start the express server
 const server = express();
-
 const PORT = 8080;
+const ready = console.log(`Server ready on PORT ${PORT}.`);
+const httpServer = createServer(server);
+const socketServer = new Server(httpServer);
+httpServer.listen(PORT, ready);
+socketServer.on("connection", socketUtils);
 
-//I start the server
-server.listen(PORT, () => {
-  console.log(`Server ready on PORT ${PORT}.`);
-});
+//Template engine
+server.engine("handlebars", engine());
+server.set("view engine", "handlebars");
+server.set("views", __dirname + "/src/views");
 
 //Middlewares
 server.use(express.json());

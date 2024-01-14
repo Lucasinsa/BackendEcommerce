@@ -1,18 +1,13 @@
 import { Router } from "express";
 import products from "../../data/fs/products.fs.js";
+import propsProducts from "../../middlewares/propsProducts.js";
+import isAdmin from "../../middlewares/isAdmin.js";
 
 const productsRouter = Router();
 
-productsRouter.post("/", async (req, res, next) => {
+productsRouter.post("/", isAdmin ,propsProducts , async (req, res, next) => {
   try {
-    const data = req.body;
-    const response = await products.create(data);
-    if (typeof response === "string") {
-      return res.json({
-        statusCode: 400,
-        response: response,
-      });
-    }
+    const response = await products.create(req.body);
     return res.json({
       statusCode: 201,
       response: response,

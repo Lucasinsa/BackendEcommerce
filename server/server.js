@@ -1,5 +1,7 @@
+import "dotenv/config.js";
 import express from "express";
 import __dirname from "./utils.js";
+import dbConnection from "./src/utils/dbConnection.js";
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
@@ -11,8 +13,11 @@ import socketUtils from "./src/utils/socket.utils.js";
 
 //I create and start the express server
 const server = express();
-const PORT = 8080;
-const ready = console.log(`Server ready on PORT ${PORT}.`);
+const PORT = process.env.PORT || 8080;
+const ready = ()=> {
+    console.log(`Server ready on PORT ${PORT}.`);
+    dbConnection();
+}
 const httpServer = createServer(server);
 const socketServer = new Server(httpServer);
 httpServer.listen(PORT, ready);

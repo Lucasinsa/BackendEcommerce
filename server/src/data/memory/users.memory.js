@@ -51,6 +51,22 @@ class UserManager {
     }
   }
 
+  readByEmail(email) {
+    try {
+      const allUsers = this.read();
+      if (typeof allUsers === "string") {
+        throw new Error(allUsers);
+      }
+      const one = allUsers.find((user) => user.email === email);
+      if (!one) {
+        throw new Error(`The user with the email ${email} doesn´t exist.`);
+      }
+      return one
+    } catch (error) {
+      return error.message 
+    }
+  }
+
   destroy(id) {
     try {
       const required = this.readOne(id);

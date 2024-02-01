@@ -73,6 +73,23 @@ class UserManager {
     }
   }
 
+  //Method to read one user by email
+  readByEmail(email) {
+    try {
+      const allUsers = this.read();
+      if (typeof allUsers === "string") {
+        throw new Error(allUsers);
+      }
+      const required = allUsers.find((each) => each.email === email);
+      if (!required) {
+        throw new Error(`The user with the email ${email} doesn´t exist.`);
+      }
+      return required;
+    } catch (error) {
+      return error.message;
+    }
+  }
+
   //Method to delete an user of the .json
   async destroy(id) {
     try {

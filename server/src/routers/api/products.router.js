@@ -1,11 +1,11 @@
 import { Router } from "express";
-import products from "../../data/fs/products.fs.js";
-import propsProducts from "../../middlewares/propsProducts.js";
+import products from "../../data/mongo/products.mongo.js";
 import isAdmin from "../../middlewares/isAdmin.js";
+import propsProducts from "../../middlewares/propsProducts.js";
 
 const productsRouter = Router();
 
-productsRouter.post("/", isAdmin ,propsProducts , async (req, res, next) => {
+productsRouter.post("/", isAdmin, propsProducts, async (req, res, next) => {
   try {
     const response = await products.create(req.body);
     return res.json({
@@ -17,9 +17,11 @@ productsRouter.post("/", isAdmin ,propsProducts , async (req, res, next) => {
   }
 });
 
-productsRouter.get("/", (req, res, next) => {
+productsRouter.get("/", async(req, res, next) => {
   try {
-    const response = products.read();
+    const filter = req.query.price ? { price: { $gt: req.query.price } } : {}
+    const order = req.query.order ? { title: req.query.order } : {}
+    const response = await products.read({filter, order});
     if (typeof response === "string") {
       return res.json({
         statusCode: 404,
@@ -35,10 +37,10 @@ productsRouter.get("/", (req, res, next) => {
   }
 });
 
-productsRouter.get("/:pid", (req, res, next) => {
+productsRouter.get("/:pid", async(req, res, next) => {
   try {
     const { pid } = req.params;
-    const response = products.readOne(pid);
+    const response = await products.readOne(pid);
     if (typeof response === "string") {
       return res.json({
         statusCode: 404,
@@ -54,7 +56,7 @@ productsRouter.get("/:pid", (req, res, next) => {
   }
 });
 
-productsRouter.put("/:pid", async (req, res, next) => {
+productsRouter.put("/:pid", isAdmin , async (req, res, next) => {
   try {
     const { pid } = req.params;
     const data = req.body;
@@ -84,7 +86,7 @@ productsRouter.put("/:pid", async (req, res, next) => {
   }
 });
 
-productsRouter.delete("/:pid", async (req, res, next) => {
+productsRouter.delete("/:pid", isAdmin, async (req, res, next) => {
   try {
     const { pid } = req.params;
     const response = await products.destroy(pid);

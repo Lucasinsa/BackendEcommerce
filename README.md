@@ -1,4 +1,4 @@
-# Sprint 5: Persistence in MongoDB
+# Challenge 2: Advanced Mongo
 
 ## ¿How it works?
 
@@ -37,6 +37,8 @@ It consists of an application that uses Express to configure an HTTP server and 
 - **GET /api/orders**: Returns all orders found in the database. You can add two queries to the query. The filter "?state=value" so that only orders with the required state are returned. The order "?order=value" to sort the orders by quantity.
 
 - **GET /api/orders/:uid**: Returns all the orders of the user with the required id in the req.params.
+
+- **GET /api/orders/total/:uid**: Returns the total amount of an user.
 
 - **PUT /api/orders/:oid**: Update the order with the requested id via req.params. Requires, minimally, an object sent by req.body with at least one of these properties: quantity or state. Additionally, the "role":"admin" property must be added.
  

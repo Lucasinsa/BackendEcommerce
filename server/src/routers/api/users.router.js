@@ -1,6 +1,7 @@
 import { Router } from "express";
-import users from "../../data/mongo/users.mongo.js";
+import { users } from "../../data/mongo/manager.mongo.js";
 import isAdmin from "../../middlewares/isAdmin.js";
+import propsUpdateUser from "../../middlewares/propsUpdateUser.js";
 
 const usersRouter = Router();
 
@@ -18,9 +19,15 @@ usersRouter.post("/", isAdmin, async (req, res, next) => {
 
 usersRouter.get("/", async (req, res, next) => {
   try {
-    const filter = req.query.name ? { name:  req.query.name } : {}
-    const order = req.query.order ? { name: req.query.order } : {}
-    const response = await users.read({filter, order});
+    const filter = {};
+    req.query.email && (filter.email = new RegExp(req.query.email.trim(), "i"));
+    const sortAndPaginate = {
+      limit: req.query.limit || 10,
+      page: req.query.page || 1,
+      sort: { name: 1 },
+    };
+    req.query.name === "desc" && (sortAndPaginate.sort.name = -1);
+    const response = await users.read({ filter, sortAndPaginate });
     if (typeof response === "string") {
       return res.json({
         statusCode: 404,
@@ -55,7 +62,7 @@ usersRouter.get("/:uid", async (req, res, next) => {
   }
 });
 
-usersRouter.put("/:uid", isAdmin, async (req, res, next) => {
+usersRouter.put("/:uid", isAdmin, propsUpdateUser, async (req, res, next) => {
   try {
     const { uid } = req.params;
     const data = req.body;

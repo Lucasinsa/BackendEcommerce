@@ -9,12 +9,6 @@ const ordersRouter = Router();
 ordersRouter.post("/", isAdmin, isOrderQuantityOk, async (req, res, next) => {
   try {
     const response = await orders.create(req.body);
-    if (typeof response === "string") {
-      return res.json({
-        statusCode: 400,
-        response: response,
-      });
-    }
     return res.json({
       statusCode: 201,
       response: response,
@@ -35,12 +29,6 @@ ordersRouter.get("/", async (req, res, next) => {
     };
     req.query.quantity === "desc" && (sortAndPaginate.sort.quantity = -1);
     const response = await orders.read({ filter, sortAndPaginate });
-    if (typeof response === "string") {
-      return res.json({
-        statusCode: 404,
-        response: response,
-      });
-    }
     return res.json({
       statusCode: 200,
       response: response,
@@ -54,12 +42,6 @@ ordersRouter.get("/:uid", async (req, res, next) => {
   try {
     const { uid } = req.params;
     const response = await orders.readOne(uid);
-    if (typeof response === "string") {
-      return res.json({
-        statusCode: 404,
-        response: response,
-      });
-    }
     return res.json({
       statusCode: 200,
       response: response,
@@ -86,12 +68,6 @@ ordersRouter.delete("/:oid", isAdmin, async (req, res, next) => {
   try {
     const { oid } = req.params;
     const response = await orders.destroy(oid);
-    if (typeof response === "string") {
-      return res.json({
-        statusCode: 404,
-        response: response,
-      });
-    }
     return res.json({
       statusCode: 200,
       response: response,
@@ -107,22 +83,6 @@ ordersRouter.put("/:oid", isAdmin, propsUpdateOrder, async (req, res, next) => {
     const { quantity, state } = req.body;
     const data = { quantity, state };
     const response = await orders.update(oid, data);
-    if (typeof response === "string") {
-      if (
-        response === `The orders with the ID ${oid} doesn´t exist.` ||
-        response === "There are no orders yet."
-      ) {
-        return res.json({
-          statusCode: 404,
-          response: response,
-        });
-      } else {
-        return res.json({
-          statusCode: 400,
-          response: response,
-        });
-      }
-    }
     return res.json({
       statusCode: 200,
       response: response,

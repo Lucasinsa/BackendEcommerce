@@ -2,14 +2,14 @@ import "dotenv/config.js";
 import express from "express";
 import __dirname from "./utils.js";
 import dbConnection from "./src/utils/dbConnection.js";
-import { createServer } from "http";
-import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import morgan from "morgan";
+import expressSession from "express-session";
+import sessionFileStore from "session-file-store";
+import MongoStore from "connect-mongo";
 import router from "./src/routers/index.router.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 import pathHandler from "./src/middlewares/pathHandler.js";
-import socketUtils from "./src/utils/socket.utils.js";
 
 //I create and start the express server
 const server = express();
@@ -18,10 +18,7 @@ const ready = () => {
   console.log(`Server ready on PORT ${PORT}.`);
   dbConnection();
 };
-const httpServer = createServer(server);
-const socketServer = new Server(httpServer);
-httpServer.listen(PORT, ready);
-socketServer.on("connection", socketUtils);
+server.listen(PORT, ready);
 
 //Template engine
 server.engine("handlebars", engine());
@@ -33,7 +30,38 @@ server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(express.static(__dirname + "/public"));
 server.use(morgan("dev"));
-
+//Memory store
+// server.use(
+//   expressSession({
+//     secret: process.env.SECRET_KEY,
+//     resave: true,
+//     saveUninitialized: true,
+//     cookie: { maxAge: 60000 },
+//   })
+// );
+//File storage
+// const FileStore = sessionFileStore(expressSession);
+// server.use(
+//   expressSession({
+//     secret: process.env.SECRET_KEY,
+//     resave: true,
+//     saveUninitialized: true,
+//     store: new FileStore({
+//       path: "./src/data/fs/files/sessions",
+//       ttl: 10,
+//       retries: 2,
+//     }),
+//   })
+// );
+//Mongo storage
+server.use(
+  expressSession({
+    secret: process.env.SECRET_KEY,
+    resave: true,
+    saveUninitialized: true,
+    store: new MongoStore({ mongoUrl: process.env.DB_LINK, ttl: 20})
+  })
+)
 server.use("/", router);
 server.use(errorHandler);
 server.use(pathHandler);

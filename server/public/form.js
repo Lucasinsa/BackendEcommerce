@@ -1,7 +1,5 @@
-import propsProductsUtils from "../src/utils/propsProducts.utils";
-import { products } from "../src/data/mongo/manager.mongo";
-
-// const socket = io();
+import propsProductsUtils from "../src/utils/propsProducts.utils.js";
+import { products } from "../src/data/mongo/manager.mongo.js";
 
 const title = document.getElementById("input-title");
 const photo = document.getElementById("input-photo");
@@ -29,17 +27,3 @@ document.getElementById("btn-create").addEventListener("click", async(event) => 
     stock.value = "";
   }
 });
-
-// socket.on("propsProductError", (data) => {
-//   const propsError = document.getElementById("props-error");
-//   if (data.error) {
-//     propsError.classList.replace("d-none", "d-block");
-//     propsError.innerText = data.message;
-//   } else {
-//     propsError.classList.replace("d-block", "d-none");
-//     title.value = "";
-//     photo.value = "";
-//     price.value = "";
-//     stock.value = "";
-//   }
-// });

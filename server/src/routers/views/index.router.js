@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { products } from "../../data/mongo/manager.mongo.js";
 import formRouter from "./form.router.js";
-import registerRouter from "./register.router.js";
+import authRouter from "./auth.router.js";
 
 const viewsRouter = Router();
 
@@ -38,6 +38,6 @@ viewsRouter.get("/", async (req, res, next) => {
 });
 
 viewsRouter.use("/form", formRouter);
-viewsRouter.use("/register", registerRouter);
+viewsRouter.use("/auth", authRouter);
 
 export default viewsRouter;

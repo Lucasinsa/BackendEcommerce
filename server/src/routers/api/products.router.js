@@ -29,12 +29,6 @@ productsRouter.get("/", async (req, res, next) => {
     };
     req.query.price === "desc" && (sortAndPaginate.sort.price = -1);
     const response = await products.read({ filter, sortAndPaginate });
-    if (typeof response === "string") {
-      return res.json({
-        statusCode: 404,
-        response: response,
-      });
-    }
     return res.json({
       statusCode: 200,
       response: response,
@@ -48,12 +42,6 @@ productsRouter.get("/:pid", async (req, res, next) => {
   try {
     const { pid } = req.params;
     const response = await products.readOne(pid);
-    if (typeof response === "string") {
-      return res.json({
-        statusCode: 404,
-        response: response,
-      });
-    }
     return res.json({
       statusCode: 200,
       response: response,
@@ -63,31 +51,11 @@ productsRouter.get("/:pid", async (req, res, next) => {
   }
 });
 
-productsRouter.put(
-  "/:pid",
-  isAdmin,
-  propsUpdateProduct,
-  async (req, res, next) => {
+productsRouter.put("/:pid", isAdmin, propsUpdateProduct, async (req, res, next) => {
     try {
       const { pid } = req.params;
       const data = req.body;
       const response = await products.update(pid, data);
-      if (typeof response === "string") {
-        if (
-          response === `The product with the ID ${pid} doesn´t exist.` ||
-          response === "There are no products yet."
-        ) {
-          return res.json({
-            statusCode: 404,
-            response: response,
-          });
-        } else {
-          return res.json({
-            statusCode: 400,
-            response: response,
-          });
-        }
-      }
       return res.json({
         statusCode: 200,
         response: response,
@@ -102,12 +70,6 @@ productsRouter.delete("/:pid", isAdmin, async (req, res, next) => {
   try {
     const { pid } = req.params;
     const response = await products.destroy(pid);
-    if (typeof response === "string") {
-      return res.json({
-        statusCode: 404,
-        response: response,
-      });
-    }
     return res.json({
       statusCode: 200,
       response: response,

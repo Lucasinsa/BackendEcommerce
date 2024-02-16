@@ -15,7 +15,8 @@ class MongoManager {
       const one = await this.model.create(data);
       return one._id;
     } catch (error) {
-      return error.message;
+      error.statusCode = 400
+      throw error;
     }
   }
 
@@ -23,11 +24,13 @@ class MongoManager {
     try {
       const all = await this.model.paginate(filter, sortAndPaginate);
       if (all.totalDocs === 0) {
-        throw new Error(`There are no ${this.collectionName} yet.`);
+        const error = Error(`There are no ${this.collectionName} yet.`);
+        error.statusCode = 404;
+        throw error;
       }
       return all;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 
@@ -38,21 +41,26 @@ class MongoManager {
         const filter = { uid: id };
         one = await this.model.find(filter);
         if (!one || (Array.isArray(one) && one.length === 0)) {
-          throw new Error(
+          const error = new Error(
             `The ${this.objectType} with the ID ${id} doesn´t exist.`
           );
+          error.statusCode = 404;
+          throw error;
         }
       } else {
         one = await this.model.findById(id);
         if (!one) {
-          throw new Error(
+          const error = new Error(
             `The ${this.objectType} with the ID ${id} doesn´t exist.`
           );
+          error.statusCode = 404;
+          throw error;
         }
       }
       return one;
     } catch (error) {
-      return error.message;
+      error.statusCode = 400;
+      throw error;
     }
   }
 
@@ -61,13 +69,16 @@ class MongoManager {
       const opt = { new: true };
       const one = await this.model.findByIdAndUpdate(id, data, opt);
       if (!one) {
-        throw new Error(
+        const error = new Error(
           `The ${this.objectType} with the ID ${id} doesn´t exist.`
         );
+        error.statusCode = 404;
+        throw error;
       }
       return one;
     } catch (error) {
-      return error.message;
+      error.statusCode = 400;
+      throw error;
     }
   }
 
@@ -75,13 +86,15 @@ class MongoManager {
     try {
       const one = await this.model.findByIdAndDelete(id);
       if (!one) {
-        throw new Error(
+        const error = new Error(
           `The ${this.objectType} with the ID ${id} doesn´t exist.`
         );
+        error.statusCode = 404;
+        throw error;
       }
       return one;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 
@@ -89,13 +102,15 @@ class MongoManager {
     try {
       const one = await this.model.findOne({ email: email });
       if (!one) {
-        throw new Error(
+        const error = new Error(
           `The ${this.objectType} with the email ${email} doesn´t exist.`
         );
+        error.statusCode = 404;
+        throw error;
       }
       return one;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 
@@ -126,7 +141,7 @@ class MongoManager {
       ]);
       return report;
     } catch (error) {
-      return error.message;
+      throw error;
     }
   }
 }

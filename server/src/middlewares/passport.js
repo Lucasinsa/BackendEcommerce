@@ -75,7 +75,7 @@ passport.use("google", new GoogleStrategy(
           email: profile.id,
           password: createHash(profile.id)
         }
-        await users.create(user)
+        await users.create(user);
       }
       // req.session.email = profile.id
       // req.session.role = user.role

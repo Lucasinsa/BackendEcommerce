@@ -4,6 +4,9 @@
         <h2 class="fw-bolder">OUR PRODUCTS</h2>
         <h3 class="h4">Discover our entire catalog.</h3>
     </div>
+    <div class="search-container">
+        <input type="text" placeholder="Search a product..." class="input-search">
+    </div>
     <div class="products-container">
         {{#if noProducts}}
             <h4 class="text-light no-products">{{noProducts}}</h4>
@@ -20,5 +23,16 @@
             {{/each}}
         {{/if}}
     </div>
+    {{#if products}}
+        <div class="prev-next-container">
+            {{#if prev}}
+                <a class="btn btn-dark fs-5 btn-prev" href="/?title={{filter}}&page={{prev}}">PREV</a>
+            {{/if}}
+            {{#if next}}
+                <a class="btn btn-dark text-center fs-5 btn-next" href="/?title={{filter}}&page={{next}}">NEXT</a>
+            {{/if}}
+        </div>
+    {{/if}}
 </div>
+<script src="/scripts/index.js"></script>
 

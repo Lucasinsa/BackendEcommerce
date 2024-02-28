@@ -3,20 +3,31 @@
     <form>
         <div class="mb-3">
             <label for="inputName" class="form-label text-center w-100">Name</label>
-            <input type="text" class="form-control" id="inputName">
+            <input type="text" class="form-control" id="input-name">
         </div>
         <div class="mb-3">
             <label for="inputPhoto" class="form-label text-center w-100">Photo</label>
-            <input type="text" class="form-control" id="inputPhoto">
+            <input type="text" class="form-control" id="input-photo">
         </div>
         <div class="mb-3">
             <label for="inputEmail" class="form-label text-center w-100">Email</label>
-            <input type="email" class="form-control" id="inputEmail" aria-describedby="emailHelp">
+            <input type="email" class="form-control" id="input-email" aria-describedby="emailHelp">
         </div>
         <div class="mb-3">
             <label for="inputPassword" class="form-label text-center w-100">Password</label>
-            <input type="password" class="form-control" id="inputPassword">
+            <input type="password" class="form-control" id="input-password">
         </div>
-        <button type="submit" class="btn btn-primary w-100 bg-dark">REGISTER</button>
+        <button type="submit" class="btn btn-primary w-100 bg-dark" id="btn-register">REGISTER</button>
     </form>
+    <div class="line-container">
+        <hr class="line">
+        <span class="text">OR REGISTER WITH GOOGLE</span>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary w-100 bg-dark" id="btn-register-google">
+            <img src="/images/googleLogo.png" alt="Google Logo">
+            GOOGLE
+        </button>
+    </div>
 </div>
+<script src="/scripts/register.js"></script>

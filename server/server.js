@@ -59,7 +59,7 @@ server.use(
     secret: process.env.SECRET_KEY,
     resave: true,
     saveUninitialized: true,
-    store: new MongoStore({ mongoUrl: process.env.DB_LINK, ttl: 20})
+    store: new MongoStore({ mongoUrl: process.env.DB_LINK, ttl: 60 * 60 * 24 * 7})
   })
 )
 server.use("/", router);

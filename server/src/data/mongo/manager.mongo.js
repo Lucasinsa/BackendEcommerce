@@ -101,13 +101,6 @@ class MongoManager {
   async readByEmail(email) {
     try {
       const one = await this.model.findOne({ email: email });
-      if (!one) {
-        const error = new Error(
-          `The ${this.objectType} with the email ${email} doesn´t exist.`
-        );
-        error.statusCode = 404;
-        throw error;
-      }
       return one;
     } catch (error) {
       throw error;

@@ -5,6 +5,7 @@ import dbConnection from "./src/utils/dbConnection.js";
 import { engine } from "express-handlebars";
 import morgan from "morgan";
 import expressSession from "express-session";
+import cookieParser from "cookie-parser"
 import sessionFileStore from "session-file-store";
 import MongoStore from "connect-mongo";
 import router from "./src/routers/index.router.js";
@@ -26,6 +27,7 @@ server.set("view engine", "handlebars");
 server.set("views", __dirname + "/src/views");
 
 //Middlewares
+server.use(cookieParser(process.env.SECRET_KEY))
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 server.use(express.static(__dirname + "/public"));

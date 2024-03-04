@@ -7,8 +7,8 @@ const createToken = (data) => {
   return token;
 };
 
-const verifyToken = (headers) => {
-  const token = headers.token;
+const verifyToken = (req) => {
+  const token = req.cookies.token;
   if (token) {
     try {
       const data = jwt.verify(token, process.env.SECRET);

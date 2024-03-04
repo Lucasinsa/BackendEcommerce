@@ -21,7 +21,7 @@ sessionsRouter.post("/register", has8char, passport.authenticate("register", { s
 //Local login
 sessionsRouter.post("/login", passport.authenticate("login",  { session: false, failureRedirect: "/api/sessions/badauth" }), async (req, res, next) => {
   try {
-    return res.json({
+    return res.cookie("token", req.token, { maxAge: 60 * 60 * 24 * 7, httpOnly: true }).json({
       statusCode: 200,
       response: "Logged in.",
       token: req.token
@@ -32,15 +32,31 @@ sessionsRouter.post("/login", passport.authenticate("login",  { session: false, 
 });
 
 //Google 
-sessionsRouter.get("/google", passport.authenticate("google",  { scope: ["email", "profile"] }))
+sessionsRouter.post("/google", passport.authenticate("google",  { scope: ["email", "profile"] }))
 
 //Google callback
 sessionsRouter.get("/google/callback", passport.authenticate("google",  { session: false, failureRedirect: "api/sessions/badauth" }), async(req, res, next) => {
   try {
-    return res.json({
+    return res.cookie("token", req.token, { maxAge: 60 * 60 * 24 * 7, httpOnly: true }).json({
       statusCode: 200,
       response: "Logged in with Google!",
-      // token: localStorage.getItem("token")
+      token: req.token
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+//Github
+sessionsRouter.post("/github", passport.authenticate("github",  { scope: ["email", "profile"] }))
+
+//Github callback
+sessionsRouter.get("/github/callback", passport.authenticate("github",  { session: false, failureRedirect: "api/sessions/badauth" }), async(req, res, next) => {
+  try {
+    return res.cookie("token", req.token, { maxAge: 60 * 60 * 24 * 7, httpOnly: true }).json({
+      statusCode: 200,
+      response: "Logged in with Github!",
+      token: req.token
     })
   } catch (error) {
     next(error)
@@ -50,17 +66,11 @@ sessionsRouter.get("/google/callback", passport.authenticate("google",  { sessio
 //Me
 sessionsRouter.post("/me", (req, res, next) => {
   try {
-    if (req.session.email) {
-      return res.json({
+    const token = verifyToken(req)
+    return res.json({
         statusCode: 200,
-        message: `Session with email: ${req.session.email}.`,
-      });
-    } else {
-      return res.json({
-        statusCode: 400,
-        message: "Bad auth.",
-      });
-    }
+        response: `Session with user ID: ${token.email}.`,
+    });
   } catch (error) {
     next(error);
   }
@@ -69,10 +79,10 @@ sessionsRouter.post("/me", (req, res, next) => {
 //Signout
 sessionsRouter.post("/signout", async(req, res, next) => {
   try {
-    localStorage.getItem("token") && localStorage.removeItem("token")
-    return res.json({
-      statusCode: 200,
-      message: "Signed out!",
+    verifyToken(req)
+    return res.clearCookie("token").json({
+        statusCode: 200,
+        response: "Signed out!",
     });
   } catch (error) {
     next(error);

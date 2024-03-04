@@ -1,12 +1,14 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
+import { Strategy as GithubStrategy } from "passport-github2";
 import { createHash, isValidPass } from "../utils/hash.utils.js";
 import { users } from "../data/mongo/manager.mongo.js";
 import { createToken } from "../utils/token.utils.js";
 
-const { GOOGLE_ID, GOOGLE_CLIENT } = process.env
+const { GOOGLE_ID, GOOGLE_CLIENT, GITHUB_ID, GITHUB_CLIENT } = process.env
 
+//Local register strategy
 passport.use(
   "register",
   new LocalStrategy(
@@ -29,6 +31,7 @@ passport.use(
   )
 );
 
+//Local login strategy
 passport.use(
   "login",
   new LocalStrategy(
@@ -39,11 +42,8 @@ passport.use(
         if (user) {
           const verify = isValidPass(password, user.password);
           if (verify) {
-            // req.session.email = email;
-            // req.session.role = user.role;
-            const token = createToken({ email, user: user.role })
+            const token = createToken({ email, role: user.role, uid: user._id })
             req.token = token
-            localStorage.setItem("token", token)
             return done(null, user);
           } else {
             return done(null, false);
@@ -58,6 +58,7 @@ passport.use(
   )
 );
 
+//Google strategy
 passport.use("google", new GoogleStrategy(
   {
     passReqToCallback: true,
@@ -77,11 +78,37 @@ passport.use("google", new GoogleStrategy(
         }
         await users.create(user);
       }
-      // req.session.email = profile.id
-      // req.session.role = user.role
-      const token = createToken({ email: user.email, user: user.role })
-      // req.token = token
-      localStorage.setItem("token",token)
+      const token = createToken({ email: user.email, role: user.role, uid: user._id })
+      req.token = token
+      return done(null, user)
+    } catch (error) {
+      return done(error)
+    }
+  }
+));
+
+//Github strategy
+passport.use("github", new GithubStrategy(
+  {
+    passReqToCallback: true,
+    clientID: GITHUB_ID,
+    clientSecret: GITHUB_CLIENT,
+    callbackURL: "http://localhost:8080/api/sessions/github/callback",
+  }, 
+  async (req, accessToken, refreshToken, profile, done) => {
+    try {
+      let user = await users.readByEmail(profile.id)
+      if(!user) {
+        user = {
+          name: profile._json.name,
+          photo: profile._json.avatar_url || "url",
+          email: profile._json.id,
+          password: createHash(profile.id)
+        }
+        await users.create(user);
+      }
+      const token = createToken({ email: user.email, role: user.role, uid: user._id })
+      req.token = token
       return done(null, user)
     } catch (error) {
       return done(error)

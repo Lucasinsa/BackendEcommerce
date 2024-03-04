@@ -21,7 +21,11 @@ document.getElementById("btn-create").addEventListener("click", async(event) => 
         }
         let response = await fetch("/api/products", opts)
         response = await response.json()
-        alert(response.response)
+        alert("Product added to database!")
+        title.value = ""
+        photo.value = ""
+        price.value = ""
+        stock.value = ""
     } catch (error) {
         alert(error.message) 
     }

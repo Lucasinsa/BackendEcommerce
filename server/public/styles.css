@@ -1,3 +1,7 @@
+/* ------------------------------*/
+/* GENERAL                       */
+/* ------------------------------*/
+
 * {
     margin: 0;
     padding: 0;
@@ -52,10 +56,14 @@ h4 {
 }
 
 .products-container {
-    display: grid;
+    /* display: grid;
     grid-template-columns: repeat(auto-fill, minmax(286px, 1fr));
     grid-auto-rows: auto;
     justify-items: center;
+    gap: 20px; */
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
     gap: 20px;
 }
 
@@ -94,17 +102,25 @@ h4 {
 /* ------------------------------*/
 /* REGISTER                      */
 /* ------------------------------*/
-#btn-register-google, #btn-login-google {
+#btn-register-google, #btn-login-github #btn-login-google, #btn-register-github {
     margin-bottom: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-#btn-register-google img, #btn-login-google img{
+#btn-register-google img, #btn-login-google img, #btn-login-github img, #btn-register-github img {
     height: 20px;
     width: 20px;
     margin-right: 10px;
+}
+
+#btn-login-github {
+    margin-top: 10px;
+}
+
+#btn-register-google{
+    margin-bottom: 10px;
 }
 
 .line-container {
@@ -128,6 +144,41 @@ h4 {
     padding: 0 10px;
 }
 
+/* ------------------------------*/
+/* ORDERS                        */
+/* ------------------------------*/
+
+.no-orders {
+    text-align: center;
+    font-size: xx-large;
+}
+
+.orders-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.orders-container .card {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 10px;
+}
+
+.orders-container .card .card-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.orders-container .card img {
+    width: 150px;
+    height: 150px;
+    margin: 10px 0px !important;
+}
 /* ------------------------------*/
 /* SCROLLBAR AND SELECTION       */
 /* ------------------------------*/

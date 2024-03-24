@@ -7,7 +7,7 @@ document.getElementById("btn-create").addEventListener("click", async(event) => 
     try {
         event.preventDefault()
         const data = {
-            title: title.value,
+            name: title.value,
             photo: photo.value,
             price: price.value,
             stock: stock.value
@@ -19,7 +19,7 @@ document.getElementById("btn-create").addEventListener("click", async(event) => 
             },
             body: JSON.stringify(data)
         }
-        let response = await fetch("/api/products", opts)
+        let response = await fetch("/api/clothes", opts)
         response = await response.json()
         alert("Product added to database!")
         title.value = ""

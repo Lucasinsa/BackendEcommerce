@@ -5,13 +5,13 @@ const collection = "orders";
 
 const schema = new Schema(
   {
-    pid: { type: Types.ObjectId, required: true, ref: "products" },
+    cid: { type: Types.ObjectId, required: true, ref: "clothes" },
     uid: { type: Types.ObjectId, required: true, ref: "users" },
-    quantity: { type: Number, required: true },
+    quantity: { type: Number, default: 1 },
     state: {
       type: String,
-      required: true,
       enum: ["reserved", "payed", "delivered"],
+      default: "reserved",
       index: 1
     },
   },
@@ -20,7 +20,7 @@ const schema = new Schema(
 
 schema.plugin(mongoosePaginate)
 
-schema.pre("find",function(){this.populate("pid")})
+schema.pre("find",function(){this.populate("cid")})
 schema.pre("find",function(){this.populate("uid")})
 
 const Order = model(collection, schema);

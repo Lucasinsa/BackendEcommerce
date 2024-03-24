@@ -6,9 +6,8 @@ import { engine } from "express-handlebars";
 import morgan from "morgan";
 import expressSession from "express-session";
 import cookieParser from "cookie-parser"
-import sessionFileStore from "session-file-store";
 import MongoStore from "connect-mongo";
-import router from "./src/routers/index.router.js";
+import IndexRouter from "./src/routers/index.router.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 import pathHandler from "./src/middlewares/pathHandler.js";
 
@@ -56,14 +55,15 @@ server.use(morgan("dev"));
 //   })
 // );
 //Mongo storage
-server.use(
-  expressSession({
-    secret: process.env.SECRET_KEY,
-    resave: true,
-    saveUninitialized: true,
-    store: new MongoStore({ mongoUrl: process.env.DB_LINK, ttl: 60 * 60 * 24 * 7})
-  })
-)
-server.use("/", router);
+// server.use(
+//   expressSession({
+//     secret: process.env.SECRET_KEY,
+//     resave: true,
+//     saveUninitialized: true,
+//     store: new MongoStore({ mongoUrl: process.env.DB_LINK, ttl: 60 * 60 * 24 * 7})
+//   })
+// )
+const router = new IndexRouter()
+server.use("/", router.getRouter());
 server.use(errorHandler);
 server.use(pathHandler);

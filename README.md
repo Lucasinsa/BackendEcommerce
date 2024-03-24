@@ -1,8 +1,8 @@
-# Sprint 7: Refactoring
+# Sprint 8: Custom Router
 
 ## ¿How it works?
 
-It consists of an application that uses Express to configure a server on port 8080. When the server is powered on with npm run dev or npm start, HTTP POST, GET, PUT and DELETE verbs requests can be made. The connection to the database with moongose ​​begins. All the responses of the API follows the rules of a REST API. Product, user and order data can be obtained, saved in MongoDB database. You will get a json response. Additionally, you can access 4 views rendered by Handlebars: home, form, orders, register and log in, depending on your role.
+It consists of an application that uses Express to configure a server on port 8080. When the server is powered on with npm run dev or npm start, HTTP POST, GET, PUT and DELETE verbs requests can be made. The connection to the database with moongose ​​begins. All the responses of the API follows the rules of a REST API. Clothe, category, size, user and order data can be obtained, saved in MongoDB database. You will get a json response. Additionally, you can access 4 views rendered by Handlebars: home, form, orders, register and log in, depending on your role.
 
 ## Views
 
@@ -24,19 +24,45 @@ It consists of an application that uses Express to configure a server on port 80
 
 - **Form**: shows a form to create a product in the Mongo database. Once created, or not, it is informed by an alert().
 
-## Modified endpoints
+### LOGGED IN USERS ("PREMIUM" ROLE)
 
-- **POST /api/sessions/register**: Allows you to create a user that will be saved in the Mongo database. Requires name, photo, email and password. The password must contain at least 8 characters. User is created using local registration passport strategy.
+- **Form**: shows a form to create a product in the Mongo database. Once created, or not, it is informed by an alert().
+- **Orders**: shows all the orders of the logged in user. The uid is destructured from the encrypted object in the token.
 
-- **POST /api/sessions/login**: Allows a user who is already in the database to log in, using local login passport strategy. Once the login is accepted, a cookie is created with the encrypted token (which contains the user's email, role and uid).
+## New endpoints
 
-- **POST /api/sessions/signout**: Allows you to close the current session, as long as it is open. 
-Verifies the existence and validity of the current token. If it exists, the cookie with the token is deleted, therefore the session is closed.
+### Categories
 
-- **POST /api/sessions/google**: Get google credentials.
+- **POST /api/categories**: Allows you to create a category that will be saved in the Mongo database. Requires category.
 
-- **POST /api/sessions/google/cb**: Execute the google passport strategy. If the user does not exist in the database, it is created and logged in. The cookie is filled with the token.
+- **GET /api/categories**: Allows you to read the all the categories that are saved in the Mongo database.
 
-- **POST /api/sessions/github**: Get github credentials.
+- **GET /api/categories/:id**: Allows you to read one categorie that is saved in the Mongo database.
 
-- **POST /api/sessions/github/cb**: Execute the github passport strategy. If the user does not exist in the database, it is created and logged in. The cookie is filled with the token.
+- **PUT /api/categories/:id**: Allows you to update  one category that is saved in the Mongo database.
+
+- **DELETE /api/categories/:id**: Allows you to delete one category that is saved in the Mongo database.
+
+### Sizes
+
+- **POST /api/sizes**: Allows you to create a size that will be saved in the Mongo database. Requires size.
+
+- **GET /api/sizes**: Allows you to read the all the sizes that are saved in the Mongo database.
+
+- **GET /api/sizes/:id**: Allows you to read one size that is saved in the Mongo database.
+
+- **PUT /api/sizes/:id**: Allows you to update one category that is saved in the Mongo database.
+
+- **DELETE /api/sizes/:id**: Allows you to delete one size that is saved in the Mongo database.
+
+### Clothes
+
+- **POST /api/clothes**: Allows you to create a clothe that will be saved in the Mongo database. Requires name, photo, size_id, category_id and price. The user id is in req.user.id.
+
+- **GET /api/clothes**: Allows you to read the all the clothes that are saved in the Mongo database.
+
+- **GET /api/clothes/:id**: Allows you to read one clothe that is saved in the Mongo database.
+
+- **PUT /api/clothes/:id**: Allows you to update one clothe that is saved in the Mongo database.
+
+- **DELETE /api/clothes/:id**: Allows you to delete one clothe that is saved in the Mongo database.

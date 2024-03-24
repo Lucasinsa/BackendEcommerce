@@ -162,7 +162,7 @@ h4 {
 }
 
 .orders-container .card {
-    width: 100%;
+    width: 39rem;
     display: flex;
     flex-direction: row;
     margin-bottom: 10px;
@@ -176,8 +176,7 @@ h4 {
 
 .orders-container .card img {
     width: 150px;
-    height: 150px;
-    margin: 10px 0px !important;
+    height: 100%;
 }
 /* ------------------------------*/
 /* SCROLLBAR AND SELECTION       */

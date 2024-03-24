@@ -5,7 +5,7 @@ selector.addEventListener("keydown", async (e) => {
   try {
     if(e.key === "Enter") {
         const text = selector.value;
-        location.search = "title=" + text;
+        location.search = "name=" + text;
     }
   } catch (error) {
     alert(error.message);

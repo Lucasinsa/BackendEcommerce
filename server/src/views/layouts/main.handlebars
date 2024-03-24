@@ -28,6 +28,9 @@
                       <a class="nav-link text-dark form-link" href="/form">Form</a>
                     {{else}}
                       <a class="nav-link text-dark form-link" href="/orders">Orders</a>
+                      {{#if isPremium}}
+                        <a class="nav-link text-dark form-link" href="/form">Form</a>
+                      {{/if}}
                     {{/if}}
                     <a class="nav-link text-light form-link bg-danger btn-log-out" href="#">Log Out</a>
                   {{else}}

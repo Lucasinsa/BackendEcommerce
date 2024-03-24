@@ -9,7 +9,7 @@ const schema = new Schema(
     photo: { type: String, required: true },
     email: { type: String, required: true, unique: true, index: 1 },
     password: { type: String, required: true },
-    role: { type: String, enum: ["user", "admin"], default: "user"}
+    role: { type: Number, enum: [0, 1, 2], default: 0}
   },
   { timestamps: true }
 );

@@ -3,13 +3,12 @@
     <div class="orders-container">
         {{#if userOrders}}
             {{#each userOrders}}
-                <div class="card" style="width: 18rem;">
+                <div class="card">
                     <img src={{this.photo}} class="card-img-top">
                     <div class="card-body">
-                        <h4 class="card-title h5 text-center fw-bolder">{{this.title}}</h4>
-                        <p class="card-text text-center fw-normal">${{this.price}}</p>
-                        <p class="card-text text-center fw-normal">x{{this.quantity}}</p>
-                        <p class="card-text text-center fw-normal">{{this.state}}</p>
+                        <h4 class="card-title h5 fw-bolder">{{this.name}}</h4>
+                        <p class="card-text fw-normal">${{this.price}}</p>
+                        <p class="card-text fw-normal">x{{this.quantity}} {{this.state}}</p>
                     </div>
                 </div>
             {{/each}}

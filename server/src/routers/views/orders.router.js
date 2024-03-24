@@ -1,44 +1,46 @@
-import { Router } from "express";
 import { verifyToken } from "../../utils/token.utils.js";
 import { orders } from "../../data/mongo/manager.mongo.js";
+import CustomRouter from "../CustomRouter.js";
 
-const ordersRouter = Router();
-
-ordersRouter.get("/", async (req, res, next) => {
-  try {
-    let isLoggedIn;
-    let isAdmin;
-    let userOrders = false;
-    try {
-      const user = verifyToken(req);
-      isLoggedIn = true;
-      user.role === "admin" ? (isAdmin = true) : (isAdmin = false);
+export default class OrdersRouter extends CustomRouter {
+  init() {
+    this.read("/", ["USER", "PREMIUM"], async (req, res, next) => {
       try {
-        userOrders = await orders.readOne(user.uid);
-        userOrders = userOrders.map((doc) => {
-          return {
-            photo: doc.pid.photo,
-            title: doc.pid.title,
-            price: doc.pid.price,
-            state: doc.state.charAt(0).toUpperCase() + doc.state.slice(1),
-            quantity: doc.quantity,
-          };
+        let isLoggedIn = false;
+        let isAdmin = false;
+        let isPremium = false;
+        let userOrders = false;
+        try {
+          const user = verifyToken(req);
+          isLoggedIn = true;
+          if (user.role === 1) isAdmin = true;
+          if (user.role === 2) isPremium = true;
+          try {
+            userOrders = await orders.readOne(user.uid);
+            userOrders = userOrders.map((doc) => {
+              console.log(doc);
+              return {
+                photo: doc.cid.photo,
+                name: doc.cid.name,
+                price: doc.cid.price,
+                state: doc.state.charAt(0).toUpperCase() + doc.state.slice(1),
+                quantity: doc.quantity,
+              };
+            });
+          } catch (error) {
+            userOrders = false;
+          }
+        } catch (error) {}
+        return res.render("orders", {
+          title: "Insawear | ORDERS",
+          isLoggedIn: isLoggedIn,
+          isAdmin: isAdmin,
+          isPremium: isPremium,
+          userOrders: userOrders,
         });
       } catch (error) {
-        userOrders = false;
+        return next(error);
       }
-    } catch (error) {
-      isLoggedIn = false;
-    }
-    return res.render("orders", {
-      title: "Insawear | ORDERS",
-      isLoggedIn: isLoggedIn,
-      isAdmin: isAdmin,
-      userOrders: userOrders,
-    });
-  } catch (error) {
-    return next(error);
+    })
   }
-});
-
-export default ordersRouter;
+}

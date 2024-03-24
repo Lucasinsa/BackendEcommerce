@@ -2,11 +2,12 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { Strategy as GoogleStrategy } from "passport-google-oauth2";
 import { Strategy as GithubStrategy } from "passport-github2";
+import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
 import { createHash, isValidPass } from "../utils/hash.utils.js";
 import { users } from "../data/mongo/manager.mongo.js";
 import { createToken } from "../utils/token.utils.js";
 
-const { GOOGLE_ID, GOOGLE_CLIENT, GITHUB_ID, GITHUB_CLIENT } = process.env
+const { GOOGLE_ID, GOOGLE_CLIENT, GITHUB_ID, GITHUB_CLIENT, SECRET } = process.env
 
 //Local register strategy
 passport.use(
@@ -17,7 +18,7 @@ passport.use(
       try {
         const one = await users.readByEmail(email);
         if (one) {
-          return done(null, false);
+          return done(null, false, { message: "Already exists", statusCode: 400 });
         } else {
           let data = req.body;
           data.password = createHash(password);
@@ -46,10 +47,10 @@ passport.use(
             req.token = token
             return done(null, user);
           } else {
-            return done(null, false);
+            return done(null, false, { message: "Bad auth from passport cb" });
           }
         } else {
-          return done(null, false);
+          return done(null, false, { message: "Bad auth from passport cb" });
         }
       } catch (error) {
         return done(error);
@@ -116,4 +117,22 @@ passport.use("github", new GithubStrategy(
   }
 ));
 
+//Passport strategy
+passport.use("jwt", new JwtStrategy({
+  jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies["token"]]),
+  secretOrKey: SECRET
+},
+async (jwt_payload, done) => {
+  try {
+    let user = await users.readByEmail(jwt_payload.email);
+    if(user){
+      user.password = null;
+      return done(null, user);
+    }
+    else return done(null,false);
+  } catch (error) {
+    return done(error);
+  }
+}
+));
 export default passport;

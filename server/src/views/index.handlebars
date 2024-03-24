@@ -15,7 +15,7 @@
                 <div class="card" style="width: 18rem;">
                     <img src={{this.photo}} class="card-img-top">
                     <div class="card-body">
-                        <h4 class="card-title h5 text-center fw-bolder">{{this.title}}</h4>
+                        <h4 class="card-title h5 text-center fw-bolder">{{this.name}}</h4>
                         <p class="card-text text-center fw-normal">${{this.price}}</p>
                         <a href="#" class="btn btn-dark text-center w-100">ADD TO CART</a>
                     </div>
@@ -26,10 +26,10 @@
     {{#if products}}
         <div class="prev-next-container">
             {{#if prev}}
-                <a class="btn btn-dark fs-5 btn-prev" href="/?title={{filter}}&page={{prev}}">PREV</a>
+                <a class="btn btn-dark fs-5 btn-prev" href="/?name={{filter}}&page={{prev}}">PREV</a>
             {{/if}}
             {{#if next}}
-                <a class="btn btn-dark text-center fs-5 btn-next" href="/?title={{filter}}&page={{next}}">NEXT</a>
+                <a class="btn btn-dark text-center fs-5 btn-next" href="/?name={{filter}}&page={{next}}">NEXT</a>
             {{/if}}
         </div>
     {{/if}}

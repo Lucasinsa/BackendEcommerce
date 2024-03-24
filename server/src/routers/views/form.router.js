@@ -1,27 +1,29 @@
-import { Router } from "express";
 import { verifyToken } from "../../utils/token.utils.js";
+import CustomRouter from "../CustomRouter.js";
 
-const formRouter = Router();
-
-formRouter.get("/", (req, res, next) => {
-  try {
-    let isLoggedIn;
-    let isAdmin;
-    try {
-      const user = verifyToken(req);
-      isLoggedIn = true;
-      user.role === "admin" ? (isAdmin = true) : (isAdmin = false);
-    } catch (error) {
-      isLoggedIn = false;
-    }
-    return res.render("form", {
-      title: "Insawear | FORM",
-      isLoggedIn: isLoggedIn,
-      isAdmin: isAdmin,
-    });
-  } catch (error) {
-    next(error);
+export default class FormRouter extends CustomRouter {
+  init() {
+    this.read("/", ["ADMIN", "PREMIUM"], (req, res, next) => {
+      try {
+        let isLoggedIn = false;
+        let isAdmin = false;
+        let isPremium = false;
+        try {
+          const user = verifyToken(req);
+          isLoggedIn = true;
+          if (user.role === 1) isAdmin = true;
+          if (user.role === 2) isPremium = true;
+        } catch (error) {}
+        return res.render("form", {
+          title: "Insawear | FORM",
+          isLoggedIn: isLoggedIn,
+          isAdmin: isAdmin,
+          isPremium: isPremium
+        });
+      } catch (error) {
+        next(error);
+      }
+    })
   }
-});
+}
 
-export default formRouter;

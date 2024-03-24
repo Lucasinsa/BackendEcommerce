@@ -1,14 +1,31 @@
 <div class="form-container w-50 m-auto mt-4 mb-4">
-    <h1 class="fw-bolder text-center mb-4">LOGIN FORM</h1>
+    <h1 class="fw-bolder text-center mb-4">LOG IN FORM</h1>
     <form>
         <div class="mb-3">
             <label for="inputEmail" class="form-label text-center w-100">Email</label>
-            <input type="text" class="form-control" id="inputEmail">
+            <input type="text" class="form-control" id="input-email">
         </div>
         <div class="mb-3">
             <label for="inputPassword" class="form-label text-center w-100">Password</label>
-            <input type="text" class="form-control" id="inputPassword">
+            <input type="password" class="form-control" id="input-password">
         </div>
-        <button type="submit" class="btn btn-primary w-100 bg-dark">LOG IN</button>
+        <button type="submit" class="btn btn-primary w-100 bg-dark" id="btn-login">LOG IN</button>
     </form>
+        <div class="line-container">
+        <hr class="line">
+        <span class="text">OR LOG IN WITH</span>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary w-100 bg-dark" id="btn-login-google">
+            <img src="/images/googleLogo.png" alt="Google Logo">
+            GOOGLE
+        </button>
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary w-100 bg-dark" id="btn-login-github">
+            <img src="/images/githubLogo.png" alt="Github Logo">
+            GITHUB
+        </button>
+    </div>
 </div>
+<script src="/scripts/login.js"></script>

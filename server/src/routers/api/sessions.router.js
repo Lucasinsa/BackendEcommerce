@@ -1,13 +1,14 @@
 import { Router } from "express";
 import { users } from "../../data/mongo/manager.mongo.js";
 import has8char from "../../middlewares/has8char.js";
-import isValidPass from "../../middlewares/isValidPass.js";
+import passport from "../../middlewares/passport.js";
+import { verifyToken } from "../../utils/token.utils.js";
 
 const sessionsRouter = Router();
 
-sessionsRouter.post("/register", has8char, async (req, res, next) => {
+//Local register
+sessionsRouter.post("/register", has8char, passport.authenticate("register", { session: false, failureRedirect: "/api/sessions/badauth" }), async (req, res, next) => {
   try {
-    await users.create(req.body);
     return res.json({
       statusCode: 201,
       response: "Registered!",
@@ -17,54 +18,87 @@ sessionsRouter.post("/register", has8char, async (req, res, next) => {
   }
 });
 
-sessionsRouter.post("/login", isValidPass, async (req, res, next) => {
+//Local login
+sessionsRouter.post("/login", passport.authenticate("login",  { session: false, failureRedirect: "/api/sessions/badauth" }), async (req, res, next) => {
   try {
-    req.session.email = req.body.email;
-    req.session.role = "admin";
-    return res.json({
+    return res.cookie("token", req.token, { maxAge: 60 * 60 * 24 * 7, httpOnly: true }).json({
       statusCode: 200,
       response: "Logged in.",
+      token: req.token
     });
   } catch (error) {
     next(error);
   }
 });
 
+//Google 
+sessionsRouter.post("/google", passport.authenticate("google",  { scope: ["email", "profile"] }))
+
+//Google callback
+sessionsRouter.get("/google/callback", passport.authenticate("google",  { session: false, failureRedirect: "api/sessions/badauth" }), async(req, res, next) => {
+  try {
+    return res.cookie("token", req.token, { maxAge: 60 * 60 * 24 * 7, httpOnly: true }).json({
+      statusCode: 200,
+      response: "Logged in with Google!",
+      token: req.token
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+//Github
+sessionsRouter.post("/github", passport.authenticate("github",  { scope: ["email", "profile"] }))
+
+//Github callback
+sessionsRouter.get("/github/callback", passport.authenticate("github",  { session: false, failureRedirect: "api/sessions/badauth" }), async(req, res, next) => {
+  try {
+    return res.cookie("token", req.token, { maxAge: 60 * 60 * 24 * 7, httpOnly: true }).json({
+      statusCode: 200,
+      response: "Logged in with Github!",
+      token: req.token
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+//Me
 sessionsRouter.post("/me", (req, res, next) => {
   try {
-    if (req.session.email) {
-      return res.json({
+    const token = verifyToken(req)
+    return res.json({
         statusCode: 200,
-        message: `Session with email: ${req.session.email}.`,
-      });
-    } else {
-      return res.json({
-        statusCode: 400,
-        message: "Bad auth.",
-      });
-    }
+        response: `Session with user ID: ${token.email}.`,
+    });
   } catch (error) {
     next(error);
   }
 });
 
-sessionsRouter.post("/signout", (req, res, next) => {
+//Signout
+sessionsRouter.post("/signout", async(req, res, next) => {
   try {
-    if (req.session.email) {
-      req.session.destroy();
-      return res.json({
+    verifyToken(req)
+    return res.clearCookie("token").json({
         statusCode: 200,
-        message: "Signed out.",
-      });
-    } else {
-      return res.json({
-        statusCode: 400,
-        message: "Bad auth.",
-      });
-    }
+        response: "Signed out!",
+    });
   } catch (error) {
     next(error);
   }
 });
+
+//Bad auth
+sessionsRouter.get("/badauth", (req, res, next) => {
+  try {
+    return res.json({
+      statusCode: 401,
+      response: "Bad auth."
+    })
+  } catch (error) {
+    next(error)
+  }
+})
 
 export default sessionsRouter;
